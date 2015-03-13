@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:p="http://primefaces.org/ui">
+
+	<f:view contentType="text/html">
+		<h:head>
+		    <title>Trade Processor </title>
+		    <h:outputStylesheet library="css" name="processor.css" />
+		</h:head>
+		<h:body>
+			<h:form id="mainForm">
+				<p:panelGrid id="dataPanel">
+					<p:row>
+						<p:column colspan="3">
+							<p:panel>
+								<p:chart type="bar" model="#{tradeController.currencyPairBarModel}" style="height:300px"/>
+							</p:panel>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="vertical-align: top;">
+							<p:dataTable id="table"
+									value="#{tradeController.currencyPairTotals}"
+									var="total"
+									tableStyle="table-layout: fixed;"
+									paginator="true"
+									rows="10"
+									rowsPerPageTemplate="5,10,15"
+									currentPageReportTemplate="From {startRecord} to {endRecord} of {totalRecords}"
+									paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+									emptyMessage="No results"
+									paginatorPosition="bottom">
+									
+								<f:facet name="header">
+									<h:outputText value="Trade Totals"/>
+								</f:facet>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Currency From"/>
+									</f:facet>
+									<h:outputText value="#{total.currencyFrom}"/>
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Currency To"/>
+									</f:facet>
+									<h:outputText value="#{total.currencyTo}"/>
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Sell Total"/>
+									</f:facet>
+									<h:outputText value="#{total.sellTotal}"/>
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Buy Total"/>
+									</f:facet>
+									<h:outputText value="#{total.buyTotal}"/>
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Transaction Count"/>
+									</f:facet>
+									<h:outputText value="#{total.transactionCount}"/>
+								</p:column>
+							</p:dataTable>
+						</p:column>
+						<p:column>
+							<p:chart type="pie" model="#{tradeController.currencyPairPieModel}" style="width:350px;height:300px"/>
+						</p:column>
+						<p:column>
+							<p:chart type="pie" model="#{tradeController.countryPieModel}" style="width:350px;height:300px"/>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+				
+				<p:poll interval="3" listener="#{tradeController.getData}" update="dataPanel" />
+			</h:form>
+			
+		</h:body>
+	</f:view>
+</html>
